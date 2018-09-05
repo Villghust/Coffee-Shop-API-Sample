@@ -1,13 +1,17 @@
 package com.wiredbraincoffee.controller;
 
 import com.wiredbraincoffee.model.Product;
+import com.wiredbraincoffee.model.ProductEvent;
 import com.wiredbraincoffee.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.Duration;
 
 //@AllArgsConstructor
 @RestController
@@ -63,5 +67,13 @@ public class ProductController {
     @DeleteMapping
     public Mono<Void> deleteAllProducts() {
         return repository.deleteAll();
+    }
+
+    @GetMapping(value = "/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ProductEvent> getProductEvent() {
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(val ->
+                        new ProductEvent(val, "Product Event")
+                );
     }
 }
