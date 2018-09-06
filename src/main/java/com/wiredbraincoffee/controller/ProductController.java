@@ -13,22 +13,21 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
-//@AllArgsConstructor
+@AllArgsConstructor
 @RestController
+//@Api(value = "ProductControllerAPI", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequestMapping("/products")
 public class ProductController {
     private ProductRepository repository;
 
-    public ProductController(ProductRepository repository) {
-        this.repository = repository;
-    }
-
     @GetMapping
+//    @ApiOperation("Gets all the products")
     public Flux<Product> getAllProducts() {
         return repository.findAll();
     }
 
     @GetMapping("{id}")
+//    @ApiOperation("Gets the product with specific ID")
     public Mono<ResponseEntity<Product>> getProduct(@PathVariable String id) {
         return repository.findById(id)
                 .map(product -> ResponseEntity.ok(product))
@@ -36,12 +35,14 @@ public class ProductController {
     }
 
     @PostMapping
+//    @ApiOperation("Create a product")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Product> saveProduct(@RequestBody Product product) {
         return repository.save(product);
     }
 
     @PutMapping("{id}")
+//    @ApiOperation("Update a product")
     public Mono<ResponseEntity<Product>> updateProduct(@PathVariable(value = "id") String id,
                                                        @RequestBody Product product) {
         return repository.findById(id)
@@ -55,6 +56,7 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
+//    @ApiOperation("Delete the product by specific id")
     public Mono<ResponseEntity<Void>> deleteProduct(@PathVariable(value = "id") String id) {
         return repository.findById(id)
                 .flatMap(existingProduct ->
@@ -65,11 +67,13 @@ public class ProductController {
     }
 
     @DeleteMapping
+//    @ApiOperation("Delete all the products")
     public Mono<Void> deleteAllProducts() {
         return repository.deleteAll();
     }
 
     @GetMapping(value = "/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//    @ApiOperation("Gets all the products events")
     public Flux<ProductEvent> getProductEvent() {
         return Flux.interval(Duration.ofSeconds(1))
                 .map(val ->
