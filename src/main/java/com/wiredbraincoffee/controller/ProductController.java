@@ -51,7 +51,7 @@ public class ProductController {
                     existingProduct.setPrice(product.getPrice());
                     return repository.save(existingProduct);
                 })
-                .map(updateProduct -> ResponseEntity.ok(updateProduct))
+                .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build()); // Se vier um Mono vazio, retorna um NOT FOUND status
     }
 

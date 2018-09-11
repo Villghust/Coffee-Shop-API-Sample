@@ -25,7 +25,7 @@ public class Application {
 
             productFlux
                     .thenMany(repository.findAll())
-                    .subscribe(System.out::println);
+                    .subscribe(System.out::println); // Printar os produtos na inicialização do Servlet.
 
             /*operations.collectionExists(Product.class)
                     .flatMap(exist -> exist ? operations.dropCollection(Product.class) : Mono.just(exist))
